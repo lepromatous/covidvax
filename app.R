@@ -2,7 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(dashboardthemes)
 library(shinyWidgets)
-
+options(rsconnect.max.bundle.size=400*1024^2)
 # source data and analysis
 source("hesitancy maps2.R")
 sf::sf_use_s2(FALSE)
