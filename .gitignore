@@ -2,6 +2,7 @@
 .Rhistory
 .Rapp.history
 *.fst
+*.feather
 
 
 # Session Data files
