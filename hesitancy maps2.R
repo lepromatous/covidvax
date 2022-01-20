@@ -13,7 +13,7 @@ library(shiny)
 library(scales)
 library(spatialreg)
 library(tidycensus)
-library(fst)
+library(feather)
 sf::sf_use_s2(FALSE)
 
 #setwd("/Users/timothywiemken/OneDrive - Pfizer/Documents/Research/covidvax")
@@ -39,27 +39,43 @@ yo <- function(datez=Sys.Date()-1, xvar = "estimated_hesitant", yvar = "series_c
 # ======================================================================
 ##### data pull Jan 18, 22022
 
-  hesitancy <- read.fst("jan182022_hesitancy.fst")
-
-
+  #hesitancy <- read.fst("jan182022_hesitancy.fst")
+  #####
+#   tokenz<-'chCxsk4zel6QXbaemotF65C9L'
+#   ##### make url for socrata
+#   urlz <-"https://data.cdc.gov/resource/q9mh-h2tw.json?$select=fips_code AS fips,estimated_hesitant, social_vulnerability_index"
+#   ## pull data
+#   
+#   hesitancy <- read.socrata(
+#     urlz,
+#     app_token = tokenz,
+#     #####
+#     email     = "tim.wiemken@gmail.com",
+#     password  = "ThisIsNotAGoodP@ssw0rd!!!"
+#   )
+#   
+# install.packages("arrow")
+# write_feather(hesitancy, "~/Desktop/hesitancy.feather")
+#setwd("/Users/timothywiemken/OneDrive - Pfizer/Documents/Research/covidvax")
+hesitancy <- arrow::read_feather("hesitancy.feather")
 
 # ======================================================================
 # COVID data: https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh
 # ======================================================================
 #####
 
-df1 <- read.fst("df1.fst")
-df2 <- read.fst("df2.fst")
-df3 <- read.fst("df3.fst")
-
-covid <- rbind(df1, df2, df3)
-
-rm(df1)
-rm(df2)
-rm(df3)
+# df1 <- read.fst("df1.fst")
+# df2 <- read.fst("df2.fst")
+# df3 <- read.fst("df3.fst")
+# 
+covid <- arrow::read_feather("covid.feather")
+# 
+# rm(df1)
+# rm(df2)
+# rm(df3)
 
 ## make url for socrata
- urlz <- "https://data.cdc.gov/resource/8xkx-amqh.json?$where=date>'2022-01-18'"
+ urlz <- "https://data.cdc.gov/resource/8xkx-amqh.json?$where=date>'2022-01-20'"
  tokenz<-'chCxsk4zel6QXbaemotF65C9L'
 
      covid2 <- read.socrata(
@@ -69,35 +85,17 @@ rm(df3)
        email     = "tim.wiemken@gmail.com",
        password  =  "ThisIsNotAGoodP@ssw0rd!!!"
      )
-
- covid3 <- rbind(covid, covid2)
- covid <- subset(covid3, covid$date == dt)
- rm(covid2)
- rm(covid3)
-
-if(nrow(covid)==0){stop("Data not avaiable for date selected, please choose an earlier date.")}
+# 
+  covid3 <- rbind(covid, covid2)
+  covid <- subset(covid3, covid3$date == datez)
+  rm(covid2)
+  rm(covid3)
+# 
+ if(nrow(covid)==0){stop("Data not avaiable for date selected, please choose an earlier date.")}
 
 # ============================================================
 # PULL NYT DATA ==============================================
 # ============================================================
-
-
-  covid_cases_deaths <- vroom("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
-  covid_cases_deaths<-covid_cases_deaths[,c(1,4,5,6)]
-  covid_cases_deaths$fips <- stringr::str_pad(covid_cases_deaths$fips, pad="0", side="left", width=5)
-  
-  covid_cases_deaths<-setDT(covid_cases_deaths)
-  covid_cases_deaths <- setorder(covid_cases_deaths, date)
-  covid_cases_deaths <- covid_cases_deaths[date == datez, .SD, by=c("fips", "date")]
-  #pops <- vroom::vroom("/Users/timwiemken/Library/Mobile Documents/com~apple~CloudDocs/Work/Pfizer/covidvax/pop_2019.csv")
-  pops <- vroom("pop_2019.csv")
-  pops$fips <- stringr::str_pad(pops$fips, pad="0", side="left", width=5)
-  covid_cases_deaths <- merge(covid_cases_deaths, pops, by="fips")
-  covid_cases_deaths$cases <- (covid_cases_deaths$cases / covid_cases_deaths$pop)*10000
-  covid_cases_deaths$deaths <- (covid_cases_deaths$deaths / covid_cases_deaths$pop)*10000
-  covid_cases_deaths$deaths_per_case <- (covid_cases_deaths$deaths / covid_cases_deaths$cases)*100
-  covid_cases_deaths<-covid_cases_deaths
-
 
 covid_cases_deaths <- vroom("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 covid_cases_deaths<-covid_cases_deaths[,c(1,4,5,6)]
@@ -132,7 +130,7 @@ hesitancy %>%
 
 covid %>%
   clean_names() %>%
-  mutate(across(all_of(names(covid)[6:34]), as.numeric),
+  mutate(across(all_of(names(covid)[c(3, 6:15)]), as.numeric),
          fips = stringr::str_pad(fips, side="left", pad="0", width=5)) -> covid
 
 # ============================================================
