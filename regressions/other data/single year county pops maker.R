@@ -1,8 +1,9 @@
 
 ### DICTIONARY: https://seer.cancer.gov/popdata/popdic.html
 ### FILES: https://seer.cancer.gov/popdata/download.html
+#download this: https://seer.cancer.gov/popdata/yr1969_2019.singleages/us.1969_2019.singleages.adjusted.txt.gz -> filename
 
-pops <- lapply(strsplit(readLines("https://seer.cancer.gov/popdata/yr1969_2019.singleages/us.1969_2019.singleages.adjusted.txt.gz")," "), as.character)
+pops <- lapply(strsplit(readLines("filename")," "), as.character)
 pops <- data.frame(unlist(pops))
 
 pops %>%
