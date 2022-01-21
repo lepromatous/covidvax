@@ -5,9 +5,9 @@ account: surveillance
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4412735
-bundleId: 5486708
+bundleId: 5493330
 url: https://surveillance.shinyapps.io/covidvax/
-when: 1642628949.18433
-lastSyncTime: 1642628949.18434
+when: 1642776533.68499
+lastSyncTime: 1642776533.68501
 asMultiple: FALSE
 asStatic: FALSE

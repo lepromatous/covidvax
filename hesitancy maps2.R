@@ -40,12 +40,12 @@ yo <- function(datez=Sys.Date()-1, xvar = "estimated_hesitant", yvar = "series_c
 ##### data pull Jan 18, 22022
 
   #hesitancy <- read.fst("jan182022_hesitancy.fst")
-  #####
+#   #####
 #   tokenz<-'chCxsk4zel6QXbaemotF65C9L'
 #   ##### make url for socrata
 #   urlz <-"https://data.cdc.gov/resource/q9mh-h2tw.json?$select=fips_code AS fips,estimated_hesitant, social_vulnerability_index"
 #   ## pull data
-#   
+# #   
 #   hesitancy <- read.socrata(
 #     urlz,
 #     app_token = tokenz,
@@ -53,7 +53,7 @@ yo <- function(datez=Sys.Date()-1, xvar = "estimated_hesitant", yvar = "series_c
 #     email     = "tim.wiemken@gmail.com",
 #     password  = "ThisIsNotAGoodP@ssw0rd!!!"
 #   )
-#   
+
 # install.packages("arrow")
 # write_feather(hesitancy, "~/Desktop/hesitancy.feather")
 #setwd("/Users/timothywiemken/OneDrive - Pfizer/Documents/Research/covidvax")
@@ -75,7 +75,7 @@ covid <- arrow::read_feather("covid.feather")
 # rm(df3)
 
 ## make url for socrata
- urlz <- "https://data.cdc.gov/resource/8xkx-amqh.json?$where=date>'2022-01-20'"
+ urlz <- "https://data.cdc.gov/resource/8xkx-amqh.json?$where=date>='2021-08-01'"
  tokenz<-'chCxsk4zel6QXbaemotF65C9L'
 
      covid2 <- read.socrata(
@@ -86,11 +86,11 @@ covid <- arrow::read_feather("covid.feather")
        password  =  "ThisIsNotAGoodP@ssw0rd!!!"
      )
 # 
-  covid3 <- rbind(covid, covid2)
-  covid <- subset(covid3, covid3$date == datez)
-  rm(covid2)
-  rm(covid3)
-# 
+covid3 <- rbind(covid, covid2)
+covid <- subset(covid3, covid3$date == datez)
+rm(covid2)
+rm(covid3)
+
  if(nrow(covid)==0){stop("Data not avaiable for date selected, please choose an earlier date.")}
 
 # ============================================================
