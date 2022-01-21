@@ -69,13 +69,12 @@ hesitancy <- arrow::read_feather("hesitancy.feather")
 # df3 <- read.fst("df3.fst")
 # 
 covid <- arrow::read_feather("covid.feather")
-# 
 # rm(df1)
 # rm(df2)
 # rm(df3)
 
 ## make url for socrata
- urlz <- "https://data.cdc.gov/resource/8xkx-amqh.json?$where=date>='2021-08-01'"
+ urlz <- "https://data.cdc.gov/resource/8xkx-amqh.json?$where=date>='2022-01-20'"
  tokenz<-'chCxsk4zel6QXbaemotF65C9L'
 
      covid2 <- read.socrata(
@@ -85,6 +84,9 @@ covid <- arrow::read_feather("covid.feather")
        email     = "tim.wiemken@gmail.com",
        password  =  "ThisIsNotAGoodP@ssw0rd!!!"
      )
+     
+     #write.csv(covid, "~/Desktop/covid.csv", row.names=F, na="")
+     
 # 
 covid3 <- rbind(covid, covid2)
 covid <- subset(covid3, covid3$date == datez)
