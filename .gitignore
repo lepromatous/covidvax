@@ -8,6 +8,9 @@
 *.csv
 *.xls
 *.xlsx
+*.txt
+
+*.DS_Store
 
 
 # Session Data files
