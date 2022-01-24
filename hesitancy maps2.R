@@ -77,13 +77,15 @@ covid <- arrow::read_feather("covid.feather")
  urlz <- "https://data.cdc.gov/resource/8xkx-amqh.json?$where=date>='2022-01-20'"
  tokenz<-'chCxsk4zel6QXbaemotF65C9L'
 
-     covid2 <- read.socrata(
+    read.socrata(
        urlz,
        app_token = tokenz,
        #####
        email     = "tim.wiemken@gmail.com",
        password  =  "ThisIsNotAGoodP@ssw0rd!!!"
-     )
+     )%>%
+      tibble()-> covid2 
+    covid2 <- covid2[,-c(47:51)]
      
      #write.csv(covid, "~/Desktop/covid.csv", row.names=F, na="")
      
