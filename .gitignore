@@ -9,7 +9,7 @@
 *.xls
 *.xlsx
 *.txt
-.DS_Store
+*.DS_Store
 # Session Data files
 .RData
 
